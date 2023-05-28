@@ -5,7 +5,7 @@ FROM python:3
 WORKDIR /app
 
 # Copy the Python script to the working directory
-COPY script7.py .
+COPY port_check.py .
 
 # Run the Python script when the container launches
-CMD ["python", "script7.py"]
+CMD ["python", "port_check.py"]

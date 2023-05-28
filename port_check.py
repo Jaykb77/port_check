@@ -7,9 +7,9 @@ def check_port(host, port):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.settimeout(2)
             s.connect((host, port))
-            return True
-    except (socket.timeout, ConnectionRefusedError):
-        return False
+            return True, None
+    except Exception as e:
+            return False, str(e)
 
 def read_hosts(file_path):
     hosts = {}
@@ -19,20 +19,19 @@ def read_hosts(file_path):
             hosts[host] = int(port)
     return hosts
 
-def log_result(host, port, is_open):
+def log_result(host, port, is_open, error):
     with open('port_check.log', 'a') as log_file:
         timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        status = 'open' if is_open else 'closed'
-        log_file.write(f'{timestamp} - Host: {host}, Port: {port}, Status: {status}\n')
-        if not is_open:
-            mtr_output = subprocess.run(['mtr', '-r','-c', '10', host], capture_output=True, text=True)
-            log_file.write(mtr_output.stdout)
+        log_file.write(f'{timestamp} - Host: {host}, Port: {port}, error: {error}\n')
+        mtr_output = subprocess.run(['mtr', '-r', '-n','-c', '10', host], capture_output=True, text=True)
+        log_file.write(mtr_output.stdout)
 
 if __name__ == '__main__':
-    hosts = read_hosts('/app/input.txt')
+    hosts = read_hosts('input.txt')
     while True:
         for host, port in hosts.items():
-            is_open = check_port(host, port)
-            log_result(host, port, is_open)
-        time.sleep(10)  # Check every 10 seconds
+            is_open, error = check_port(host, port)
+            if not is_open:
+             log_result(host, port, is_open, error)
+        time.sleep(15)  # Check every 10 seconds
 
