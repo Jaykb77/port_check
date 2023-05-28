@@ -27,7 +27,7 @@ def log_result(host, port, is_open, error):
         log_file.write(mtr_output.stdout)
 
 if __name__ == '__main__':
-    hosts = read_hosts('input.txt')
+    hosts = read_hosts('/app/input.txt')
     while True:
         for host, port in hosts.items():
             is_open, error = check_port(host, port)
