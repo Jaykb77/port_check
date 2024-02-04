@@ -33,5 +33,5 @@ if __name__ == '__main__':
             is_open, error = check_port(host, port)
             if not is_open:
              log_result(host, port, is_open, error)
-        time.sleep(15)  # Check every 10 seconds
+        time.sleep(15)  # Check every 15 seconds
 
