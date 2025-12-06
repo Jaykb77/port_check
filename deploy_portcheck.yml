@@ -1,0 +1,28 @@
+---
+- name: Deploy portcheck service
+  hosts: all
+  become: yes
+  tasks:
+    - name: Ensure portcheck directory exists
+      ansible.builtin.git:
+        repo: https://github.com/Jaykb77/port_check.git
+        dest: /opt/port_check
+        version: main
+    - name: Create service file for portcheck
+      ansible.builtin.copy:
+        dest: /etc/systemd/system/portcheck.service
+        content: |
+          [Unit]
+          Description=Port Check Service
+          After=network.target
+
+          [Service]
+          WorkingDirectory=/opt/port_check
+          ExecStart=/usr/bin/python3 /opt/port_check/port_check.py
+          Restart=always
+          User=root
+          StandardOutput=null
+          StandardError=journal
+
+          [Install]
+          WantedBy=multi-user.target
