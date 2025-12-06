@@ -162,3 +162,5 @@ cython_debug/
 #input file
 #
 input.txt
+#log file
+port_check.log*

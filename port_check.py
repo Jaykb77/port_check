@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import socket
 import time
 import subprocess
@@ -27,11 +29,11 @@ def log_result(host, port, is_open, error):
         log_file.write(mtr_output.stdout)
 
 if __name__ == '__main__':
-    hosts = read_hosts('/app/input.txt')
+    hosts = read_hosts('input.txt')
     while True:
         for host, port in hosts.items():
             is_open, error = check_port(host, port)
             if not is_open:
              log_result(host, port, is_open, error)
-        time.sleep(15)  # Check every 15 seconds
+        time.sleep(15)
 
